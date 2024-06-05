@@ -25,7 +25,29 @@ app.post("/rejistered",async (req,res)=>{
        password:password
    })
 
-   res.json(userKnowledge)
+//    res.json(userKnowledge)
+ res.redirect("/login");
+})
+
+app.get("/login",async(req,res)=>{
+    res.render("login.ejs")
+})
+
+
+app.post("/login",async(req,res)=>{
+    const {email,password} = req.body
+    const userInfo = await userModel.findOne({email:email})
+
+     if(!userInfo) return res.status("404").send("Something went wrong");
+     
+    if(password!== userInfo.password) res.status("404").send("something went wrong");
+
+    res.redirect("/home")
+
+})
+
+app.get("/home",(req,res)=>{
+    res.render("home.ejs")
 })
 
 
